@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
 
 function Navbar({ cartCount, onCartClick }) {
   return (
     <nav className="navbar">
-      <h1>Fake Store</h1>
-      <button className="cart-button" onClick={onCartClick}>
-        Cart ({cartCount})
+      <div className="navbar__brand">Fake Store Cart</div>
+
+      <button className="navbar__cart-btn" onClick={onCartClick}>
+        Cart <span className="navbar__cart-count">({cartCount})</span>
       </button>
     </nav>
   );
