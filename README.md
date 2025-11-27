@@ -1,2 +1,19 @@
 # Fake-Store-Cart-App
-A responsive React-based e-commerce interface that fetches products from the Fake Store API and enables users to add items to a cart through an interactive modal using Tailwind CSS for seamless UI styling.
+
+## Components Overview
+
+- **App**: Main component managing state for products and cart
+- **Navbar**: Displays app title and cart button with item count
+- **ProductList**: Renders a grid of products
+- **Product**: Individual product card with add to cart functionality
+- **CartModal**: Modal displaying cart items with remove options
+
+## Technologies Used
+
+- ReactJS
+- Fake Store API (https://fakestoreapi.com/products)
+- CSS for styling and responsiveness
+
+## Responsive Design
+
+The app uses CSS Grid for the product layout, which automatically adjusts to different screen sizes. The modal is also responsive and works well on mobile devices.
