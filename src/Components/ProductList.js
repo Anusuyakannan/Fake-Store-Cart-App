@@ -1,17 +1,17 @@
-import React from 'react';
-import Product from './Product';
+import React from "react";
+import ProductCard from "./ProductCard";
 
 function ProductList({ products, onAddToCart }) {
   return (
-    <div className="product-list">
-      {products.map(product => (
-        <Product 
-          key={product.id} 
-          product={product} 
-          onAddToCart={onAddToCart} 
+    <section className="product-list">
+      {products.map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          onAddToCart={onAddToCart}
         />
       ))}
-    </div>
+    </section>
   );
 }
 
