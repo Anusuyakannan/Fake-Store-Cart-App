@@ -1,48 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import ProductList from './components/ProductList';
-import CartModal from './components/CartModal';
+import React, { useEffect, useState } from "react";
+import Navbar from "./components/Navbar";
+import ProductList from "./components/ProductList";
+import CartModal from "./components/CartModal";
+
+const API_URL = "https://fakestoreapi.com/products";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
+  // Fetch products from Fake Store API
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
-      .then(response => response.json())
-      .then(data => setProducts(data))
-      .catch(error => console.error('Error fetching products:', error));
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await fetch(API_URL);
+        if (!res.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
-  const addToCart = (product) => {
-    const existingProduct = cart.find(item => item.id === product.id);
-    if (existingProduct) {
-      alert('Item already added to the cart');
-    } else {
-      setCart([...cart, product]);
+  // Add product to cart
+  const handleAddToCart = (product) => {
+    const alreadyInCart = cart.some((item) => item.id === product.id);
+    if (alreadyInCart) {
+      window.alert("Item already added to the cart");
+      return;
     }
+    setCart((prev) => [...prev, product]);
   };
 
-  const removeFromCart = (productId) => {
-    setCart(cart.filter(item => item.id !== productId));
+  // Remove product from cart
+  const handleRemoveFromCart = (productId) => {
+    setCart((prev) => prev.filter((item) => item.id !== productId));
   };
 
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
+  const cartCount = cart.length;
 
   return (
-    <div className="App">
-      <Navbar cartCount={cart.length} onCartClick={toggleModal} />
-      <ProductList products={products} onAddToCart={addToCart} />
-      {showModal && (
-        <CartModal 
-          cart={cart} 
-          onRemoveFromCart={removeFromCart} 
-          onClose={toggleModal} 
-        />
-      )}
+    <div className="app">
+      <Navbar cartCount={cartCount} onCartClick={() => setIsCartOpen(true)} />
+
+      <main className="container">
+        {loading && <p className="status">Loading products...</p>}
+        {error && <p className="status status--error">{error}</p>}
+
+        {!loading && !error && (
+          <ProductList products={products} onAddToCart={handleAddToCart} />
+        )}
+      </main>
+
+      <CartModal
+        isOpen={isCartOpen}
+        cartItems={cart}
+        onClose={() => setIsCartOpen(false)}
+        onRemove={handleRemoveFromCart}
+      />
     </div>
   );
 }
