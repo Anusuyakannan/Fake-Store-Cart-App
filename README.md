@@ -1,4 +1,5 @@
 # Fake-Store-Cart-App
+#clone App
 
 ## Components Overview
 
